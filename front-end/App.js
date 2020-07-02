@@ -30,10 +30,20 @@ export default function App() {
 
   _onCreateCustomer = () => {
     ServerConnector.getInstance().sendToServer("createAccount", {
-      firstName: 'Maxime',
-      lastName: 'Gfr',
-      email: 'contact@sisilafamille.fr',
-      country: 'FR'
+      lastname : "Martin",
+      firstname : "Philippe",
+      birthdate : "1986-03-01",
+      birth_country: "FRA",
+      birth_city: "Paris",
+      nationality: "FRA",
+      citizen_us: false,
+      fiscal_us: false,
+      fiscal_out_france: true,
+      label1: "12 rue de Stalingrad",
+      zip_code: "92800",
+      city: "Puteaux",
+      country: "FRA",
+      email: "m.philippe@wha.fr"
     }).then((res) => {
       dispatch({type: 'SET_COUNT', value: res})
     }).catch((err) => {
