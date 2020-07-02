@@ -46,12 +46,57 @@ app.post('/createAccount', (req, res, next) => {
     },
     email: req.body.email,
   })
-  .then((response) => {
-    res.json({url: response})
-  })
-  .catch((error) => {
-    res.json({err: error});
-  });
+    .then((response) => {
+      res.json({url: response})
+    })
+    .catch((error) => {
+      res.json({err: error});
+    });
+});
+
+app.get('/getAccounts', (req, res, next) => {
+  client.request('GET', '/accounts', {})
+    .then((response) => {
+      res.json({url: response})
+    })
+    .catch((error) => {
+      res.json({err: error});
+    });
+});
+
+app.post('/getAccount', (req, res, next) => {
+  client.request('GET', '/accounts/'+req.body.id, {})
+    .then((response) => {
+      res.json({url: response})
+    })
+    .catch((error) => {
+      res.json({err: error});
+    });
+});
+
+app.post('/createWallet', (req, res, next) => {
+  client.request('POST', '/wallets/',{
+      account_id: req.body.account_id,
+      type: req.body.type
+    })
+    .then((response) => {
+      res.json({url: response})
+    })
+    .catch((error) => {
+      res.json({err: error});
+    });
+});
+
+app.post('/cashIn', (req, res, next) => {
+  client.request('POST', '/wallets/'+req.body.id, {
+
+    })
+    .then((response) => {
+      res.json({url: response})
+    })
+    .catch((error) => {
+      res.json({err: error});
+    });
 });
 
 app.listen(port, () => console.log(`The application is listening on port ${port}!`))
