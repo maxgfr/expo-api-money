@@ -105,7 +105,7 @@ export default function App() {
 
   _onCreateWallet = () => {
     ServerConnector.getInstance().sendToServer("createWallet", {
-      account_id: state.wallet_id,
+      account_id: state.id,
       type: "EMONEY"
     }).then((res) => {
       if(res && res.url) {
