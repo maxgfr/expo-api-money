@@ -117,25 +117,12 @@ export default function App() {
     })
   }
 
-  _onCashIn = () => {
-    ServerConnector.getInstance().sendToServer("cashIn", {
-
-    }).then((res) => {
-      dispatch({type: 'SET_WALLET_ID', value: res.url.id})
-      dispatch({type: 'SET_JSON', value: res})
-    }).catch((err) => {
-      console.log(err);
-    })
-  }
-
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1, backgroundColor: '#fff', alignItems: 'center', justifyContent: 'center' }}>
       <StatusBar style="auto" />
       <Button onPress={_onCreateCustomer} title="Create customer"/>
       <Text>{state.id}</Text>
       <Button onPress={_onCreateWallet} title="Attach a wallet to this customer"/>
-      <Text>{state.wallet_id}</Text>
-      <Button onPress={_onCreateWallet} title="Make a cash-in"/>
       <Text>{state.wallet_id}</Text>
       <JSONTree data={state.json} />
     </ScrollView>

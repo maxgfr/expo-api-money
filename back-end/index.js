@@ -87,16 +87,4 @@ app.post('/createWallet', (req, res, next) => {
     });
 });
 
-app.post('/cashIn', (req, res, next) => {
-  client.request('POST', '/wallets/'+req.body.id, {
-
-    })
-    .then((response) => {
-      res.json({url: response})
-    })
-    .catch((error) => {
-      res.json({err: error});
-    });
-});
-
 app.listen(port, () => console.log(`The application is listening on port ${port}!`))
