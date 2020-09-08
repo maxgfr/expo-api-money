@@ -154,41 +154,6 @@ app.post('/getWalletActivity', (req, res, next) => {
     });
 });
 
-app.post('/createBankAccount', (req, res, next) => {
-  client.request('POST', '/bankaccounts/', {
-      account_id: req.body.account_id,
-      number: req.body.number,
-      bic: req.body.number,
-      holder_name: req.body.holder_name,
-      file_content: req.body.file_content,
-    })
-    .then((response) => {
-      res.json({
-        url: response
-      })
-    })
-    .catch((error) => {
-      res.json({
-        err: error.response.data
-      });
-    });
-});
-
-
-app.post('/getBankAccount', (req, res, next) => {
-  client.request('GET', '/bankaccounts/' + req.body.id, {})
-    .then((response) => {
-      res.json({
-        url: response
-      })
-    })
-    .catch((error) => {
-      res.json({
-        err: error.response.data
-      });
-    });
-});
-
 app.post('/addDocument', (req, res, next) => {
   client.request('POST', '/accounts/' + req.body.account_id + '/documents', {
       type: req.body.type,
@@ -330,7 +295,170 @@ app.post('/transfers', (req, res, next) => {
 });
 
 
+app.post('/transfers', (req, res, next) => {
+  client.request('POST', '/cash-in/creditcards/init', {
+      partner_ref: req.body.partner_ref,
+      receiver_wallet_id: req.body.receiver_wallet_id,
+      fees_wallet_id: req.body.fees_wallet_id,
+      amount: req.body.amount,
+      fees: req.body.fees,
+      return_url: req.body.return_url,
+      lang: req.body.lang,
+      auth_timeout_delay: 86400
+    })
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/transfers-with-card', (req, res, next) => {
+  client.request('POST', '/cash-in/creditcards/' + req.body.card_id, {
+      partner_ref: req.body.partner_ref,
+      payment_method: "CREDIT_CARD",
+      receiver_wallet_id: req.body.receiver_wallet_id,
+      fees_wallet_id: req.body.fees_wallet_id,
+      amount: req.body.amount,
+      fees: req.body.fees,
+      return_url: req.body.return_url,
+      lang: req.body.lang,
+      auth_timeout_delay: 86400
+    })
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/authorize-bank-transfer', (req, res, next) => {
+  client.request('POST', '/cash-in/bankwire/authorize', {
+      partner_ref: req.body.partner_ref,
+      receiver_wallet_id: req.body.receiver_wallet_id,
+      fees_wallet_id: req.body.fees_wallet_id,
+      amount: req.body.amount,
+      fees: req.body.fees
+    })
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
 
 
+app.post('/cash-out', (req, res, next) => {
+  client.request('POST', '/cash-out', {
+      partner_ref: req.body.partner_ref,
+      sender_wallet_id: req.body.sender_wallet_id,
+      fees_wallet_id: req.body.fees_wallet_id,
+      amount: req.body.amount,
+      fees: req.body.fees,
+      bankaccount_id: req.body.bankaccount_id,
+    })
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/createBankAccount', (req, res, next) => {
+  client.request('POST', '/bankaccounts/', {
+      account_id: req.body.account_id,
+      number: req.body.number,
+      bic: req.body.number,
+      holder_name: req.body.holder_name,
+      file_content: req.body.file_content,
+    })
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+
+app.post('/getBankAccount', (req, res, next) => {
+  client.request('GET', '/bankaccounts/' + req.body.id, {})
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/deleteBankAccount', (req, res, next) => {
+  client.request('DELETE', '/bankaccounts/' + req.body.id, {})
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/getCreditCard', (req, res, next) => {
+  client.request('GET', '/creditcards/' + req.body.id, {})
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
+
+app.post('/deleteCreditCard', (req, res, next) => {
+  client.request('DELETE', '/creditcards/' + req.body.id, {})
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
 
 app.listen(port, () => console.log(`The application is listening on port ${port}!`))
