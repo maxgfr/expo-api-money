@@ -139,6 +139,19 @@ app.post('/getWalletBalance', (req, res, next) => {
     });
 });
 
+app.post('/getWalletActivities', (req, res, next) => {
+  client.request('GET', `/wallets/${req.body.id}/activities/?per_page=${req.body.per_page}&page=${req.body.page}`, {})
+    .then((response) => {
+      res.json({
+        url: response
+      })
+    })
+    .catch((error) => {
+      res.json({
+        err: error.response.data
+      });
+    });
+});
 
 app.post('/getWalletActivity', (req, res, next) => {
   client.request('GET', '/wallets/' + req.body.id + "/activities/" + req.body.activity_id, {})
@@ -157,10 +170,11 @@ app.post('/getWalletActivity', (req, res, next) => {
 app.post('/addDocument', (req, res, next) => {
   client.request('POST', '/accounts/' + req.body.account_id + '/documents', {
       type: req.body.type,
-      files: [{
-        file_name: req.body.file_name,
-        content: req.body.content
-      }]
+      files: req.body.files
+      // files: [{
+      //   file_name: req.body.file_name,
+      //   content: req.body.content
+      // }]
     })
     .then((response) => {
       res.json({
@@ -295,7 +309,7 @@ app.post('/transfers', (req, res, next) => {
 });
 
 
-app.post('/transfers', (req, res, next) => {
+app.post('/card', (req, res, next) => {
   client.request('POST', '/cash-in/creditcards/init', {
       partner_ref: req.body.partner_ref,
       receiver_wallet_id: req.body.receiver_wallet_id,
@@ -385,12 +399,10 @@ app.post('/cash-out', (req, res, next) => {
 });
 
 app.post('/createBankAccount', (req, res, next) => {
-  client.request('POST', '/bankaccounts/', {
+  client.request('POST', '/bankaccounts', {
       account_id: req.body.account_id,
       number: req.body.number,
-      bic: req.body.number,
       holder_name: req.body.holder_name,
-      file_content: req.body.file_content,
     })
     .then((response) => {
       res.json({
