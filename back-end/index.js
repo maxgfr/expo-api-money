@@ -4,8 +4,12 @@ const bodyParser = require("body-parser");
 const cookieParser = require("cookie-parser");
 const morgan = require("morgan");
 const dotenv = require("dotenv").config();
-const { v4: uuidv4 } = require("uuid");
-const { ApiMoney } = require("api-money-node-sdk");
+const {
+  v4: uuidv4
+} = require("uuid");
+const {
+  ApiMoney
+} = require("api-money-node-sdk");
 const app = express();
 const port = 3000;
 const client = new ApiMoney({
@@ -20,9 +24,13 @@ app.use(cookieParser());
 app.use(
   bodyParser.urlencoded({
     extended: true,
+    limit: '10mb',
   })
 ); // parse application/x-www-form-urlencoded
-app.use(bodyParser.json()); // parse application/json
+app.use(bodyParser.json({
+  extended: true,
+  limit: '10mb',
+})); // parse application/json
 app.use(cors());
 
 app.get("/", (req, res, next) => {
@@ -52,6 +60,40 @@ app.post("/createAccount", (req, res, next) => {
         country: req.body.country,
       },
       email: req.body.email,
+    })
+    .then(response => {
+      res.json({
+        url: response,
+      });
+    })
+    .catch(error => {
+      res.json({
+        err: error,
+      });
+    });
+});
+
+
+app.post("/createBusinessAccount", (req, res, next) => {
+  client
+    .request("POST", "/accounts/business", {
+      name: req.body.name,
+      business_type: req.body.business_type,
+      email: req.body.email,
+      registration_number: req.body.registration_number,
+      phone_number: req.body.phone_number,
+      representative: {
+        lastname: req.body.lastname,
+        firstname: req.body.firstname,
+        birthdate: req.body.birthdate,
+        nationality: req.body.nationality,
+      },
+      address: {
+        label1: req.body.label1,
+        zip_code: req.body.zip_code,
+        city: req.body.city,
+        country: req.body.country,
+      },
     })
     .then(response => {
       res.json({
@@ -147,8 +189,7 @@ app.post("/getWalletActivities", (req, res, next) => {
   client
     .request(
       "GET",
-      `/wallets/${req.body.id}/activities/?per_page=${req.body.per_page}&page=${req.body.page}`,
-      {}
+      `/wallets/${req.body.id}/activities/?per_page=${req.body.per_page}&page=${req.body.page}`, {}
     )
     .then(response => {
       res.json({
@@ -166,8 +207,7 @@ app.post("/getWalletActivity", (req, res, next) => {
   client
     .request(
       "GET",
-      "/wallets/" + req.body.id + "/activities/" + req.body.activity_id,
-      {}
+      "/wallets/" + req.body.id + "/activities/" + req.body.activity_id, {}
     )
     .then(response => {
       res.json({
@@ -207,8 +247,7 @@ app.post("/getDocument", (req, res, next) => {
   client
     .request(
       "GET",
-      "/accounts/" + req.body.account_id + "/documents/" + req.body.document_id,
-      {}
+      "/accounts/" + req.body.account_id + "/documents/" + req.body.document_id, {}
     )
     .then(response => {
       res.json({
@@ -227,11 +266,10 @@ app.post("/askKyc", (req, res, next) => {
     .request(
       "PUT",
       "/accounts/" +
-        req.body.account_id +
-        "/validations/" +
-        req.body.kyc_level +
-        "/submit",
-      {}
+      req.body.account_id +
+      "/validations/" +
+      req.body.kyc_level +
+      "/submit", {}
     )
     .then(response => {
       res.json({
@@ -249,8 +287,7 @@ app.post("/getLastKyc", (req, res, next) => {
   client
     .request(
       "GET",
-      "/accounts/" + req.body.account_id + "/validations/last",
-      {}
+      "/accounts/" + req.body.account_id + "/validations/last", {}
     )
     .then(response => {
       res.json({
@@ -315,8 +352,7 @@ app.post("/receiptTransaction", (req, res, next) => {
   client
     .request(
       "GET",
-      "/transactions/" + req.body.id + "/receipt" + req.body.language,
-      {}
+      "/transactions/" + req.body.id + "/receipt/" + req.body.language, {}
     )
     .then(response => {
       res.json({
