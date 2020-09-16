@@ -368,7 +368,7 @@ app.post("/receiptTransaction", (req, res, next) => {
 
 app.post("/partnerTransaction", (req, res, next) => {
   client
-    .request("GET", "/transactions/partner_ref/" + req.body.partner_ref, {})
+    .request("GET", "/transactions/reference/" + req.body.partner_ref, {})
     .then(response => {
       res.json({
         url: response,
