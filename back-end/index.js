@@ -11,7 +11,7 @@ const {
   ApiMoney
 } = require("api-money-node-sdk");
 const app = express();
-const port = 3000;
+const port = 4321;
 const client = new ApiMoney({
   secretKey: process.env.SECRET_KEY,
   accessKey: process.env.ACCESS_KEY,
